@@ -11,3 +11,4 @@ Optical flow based Feature tracking is performed between two consecutive frames 
 
 3.) Pose estimation
 Epipolar geometry based Pose estimation which includes computation of Essential matrix and Decomposition to find translation and orientation between two frames. 
+![alt text](https://github.com/DenimPatel/Visual-Odometry/blob/master/vo.gif)
