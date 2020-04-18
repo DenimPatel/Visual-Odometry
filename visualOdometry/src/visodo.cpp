@@ -1,16 +1,13 @@
 #include "vo_features.h"
 
-
 using namespace cv;
 using namespace std;
-
 
 // decide how many frames you want to precess 
 #define MAX_FRAME 3000
 
 // decide how many feature you want to extract from each frame
 #define MIN_NUM_FEAT 1000 //2000
-
 
 // EXPERIMENTAL VARIABLES 
 static int waitUserKey;
@@ -65,9 +62,6 @@ double getScaleAndIdealTranslation(int frame_id, int sequence_id, double& real_x
   // L2 norm between two consucutive frame is scale value
   return sqrt((x-x_prev)*(x-x_prev) + (y-y_prev)*(y-y_prev) + (z-z_prev)*(z-z_prev)) ;
 }
-
-
-
 
 int main() {
 
@@ -140,7 +134,6 @@ int main() {
   double focal = 718.8560;
   cv::Point2d pp(607.1928, 185.2157);
   //recovering the pose and the essential matrix
-
 
   // initialize matrices
   // E- essential matrix
