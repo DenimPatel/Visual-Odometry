@@ -1,29 +1,3 @@
-/*
-
-The MIT License
-
-Copyright (c) 2015 Avi Singh
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
-*/
-
 #include "opencv2/video/tracking.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
@@ -33,8 +7,8 @@ THE SOFTWARE.
 
 #include <iostream>
 #include <ctype.h>
-#include <algorithm> // for copy
-#include <iterator> // for ostream_iterator
+#include <algorithm>
+#include <iterator> 
 #include <vector>
 #include <ctime>
 #include <sstream>
@@ -45,14 +19,13 @@ THE SOFTWARE.
 using namespace cv;
 using namespace std;
 
-
 void adaptiveNonMaximalSuppresion( std::vector<cv::KeyPoint>& keypoints,
                                        const int numToKeep );
 
+/*
+* Function uses Optical flow to track the features into next frame 
+*/
 void featureTracking(Mat img_1, Mat img_2, vector<Point2f>& points1, vector<Point2f>& points2, vector<uchar>& status)	{ 
-///////////////////////////////////////////////////////////////////////
-/// Function uses Optical flow to track the features into next frame 
-///////////////////////////////////////////////////////////////////////
 
   vector<float> err;					
   Size winSize=Size(21,21);																								
@@ -72,9 +45,7 @@ void featureTracking(Mat img_1, Mat img_2, vector<Point2f>& points1, vector<Poin
             }
         }
   imshow("Feature tracked", img_1 );
-
-
-
+  
   // remove points whose value in status is 0 or the points lies outside of image
   int indexCorrection = 0;
   for( int i=0; i<status.size(); i++)
@@ -92,11 +63,11 @@ void featureTracking(Mat img_1, Mat img_2, vector<Point2f>& points1, vector<Poin
      	}
 
      }
-
-
 }
 
-
+/*
+* Function finds the feature points from the image 
+*/
 void featureDetection(Mat img_1, vector<Point2f>& points1)	{   //uses FAST as of now, modify parameters as necessary
   /* currently using FAST but try ORB too! to comapere the results */
   vector<KeyPoint> keypoints_1;
@@ -114,9 +85,10 @@ void featureDetection(Mat img_1, vector<Point2f>& points1)	{   //uses FAST as of
  KeyPoint::convert(keypoints_1, points1, vector<int>());
 }
 
-
-// This will achieve an even distribution of those features which are locally "responsive".
-// guided by the paper "Multi-Image Matching using Multi-Scale Oriented Patches" by Brown, Szeliski, and Winder.
+/*
+* This will achieve an even distribution of those features which are locally "responsive".
+* guided by the paper "Multi-Image Matching using Multi-Scale Oriented Patches" by Brown, Szeliski, and Winder.
+*/
 void adaptiveNonMaximalSuppresion( std::vector<cv::KeyPoint>& keypoints,
                                        const int numToKeep )
     {
