@@ -1,8 +1,3 @@
-// Denim Patel
-// Visual Odometry results cum step-wise tutorial
-
-
-// included our helping header file
 #include "vo_features.h"
 
 
@@ -20,17 +15,15 @@ using namespace std;
 // EXPERIMENTAL VARIABLES 
 static int waitUserKey;
 
-
-
-////////////////////////////////////////////////////////////
-// Function that gives absolute scale between frame transfer
-////////////////////////////////////////////////////////////
+/*
+* Function that provides absolute scale between frame transfer
+*/
 double getScaleAndIdealTranslation(int frame_id, int sequence_id, double& real_x, double& real_y, double& real_z){
   
   string line;
   int i = 0;
   ifstream myfile ("/home/denim/SELF_LEARN/visualOdom/00.txt");
-  double x =0, y=0, z = 0;
+  double x = 0, y = 0, z = 0;
   double x_prev, y_prev, z_prev;
 
   // VARIABLES TO GET ORIENTATION
@@ -46,13 +39,6 @@ double getScaleAndIdealTranslation(int frame_id, int sequence_id, double& real_x
       y_prev = y;
       std::istringstream in(line);
 
-      // cout << line << '\n';
-      // cout<<"gettig scale value from file"<<endl;
-      // cout<<"line read"<<line<<endl;
-      // cout<<"Press Enter to continue"<<endl;
-      // cin.get();
-
-	  // in line 
       for (int j=0; j<12; j++)  {
         in >> z ;
         if(j==7) y=z;
@@ -76,21 +62,14 @@ double getScaleAndIdealTranslation(int frame_id, int sequence_id, double& real_x
   real_y = y;
   real_z = z;
   
-
-// for fiding the heading of the camera GT
-  // cout<<"GT YAW: "<< atan2(r31, sqrt( r32*r32 + r33*r33))<<endl;
-  
-
-
   // L2 norm between two consucutive frame is scale value
   return sqrt((x-x_prev)*(x-x_prev) + (y-y_prev)*(y-y_prev) + (z-z_prev)*(z-z_prev)) ;
-
 }
 
 
 
 
-int main()	{
+int main() {
 
   // declare variables to save two images
   Mat img_1, img_2;
@@ -260,13 +239,8 @@ int main()	{
 */
 ///////////////////////////////////////////////////////////////////////////////////
     double real_x, real_y, real_z; 
-
-	scale= getScaleAndIdealTranslation(numFrame, 0,real_x, real_y, real_z ); 
-	// scale= 0.7;
-	// cout<<"car height before scale:"<<t_f.at<double>(1)<<"translation@ curr frame"<< t.at<double>(1)<<endl;
-
-  	// check conditions of scaling such as should be legitimate, ha;dnjfndanjfnaj
-  // check conditions of scaling such as should be legitimate, ha;dnjfndanjfnaj
+    scale= getScaleAndIdealTranslation(numFrame, 0,real_x, real_y, real_z ); 
+	  
     if ((scale>0.1)&&(t.at<double>(2) > t.at<double>(0)) && (t.at<double>(2) > t.at<double>(1))) {
     	// use scale to scale roation and translation matrix
       t_f = t_f + scale*(R_f*t);
@@ -275,10 +249,6 @@ int main()	{
     else{
     	cout<<"Very SMALL MOTION"<<endl;
     	cout<<"scale"<<scale<<endl;
-    	// cout<<"first value"<<t.at<double>(0)<<endl;
-    	// cout<<"second value"<<t.at<double>(1)<<endl;
-    	// cout<<"third value"<<t.at<double>(2)<<endl;
-
     }
 
     // TO PRINT CURRENT YAW ANGLE OF CAR CALCULATED BY VO
@@ -286,28 +256,14 @@ int main()	{
 	// cout<<atan2(R_f.at<double>(2,0),sqrt( R_f.at<double>(2,1)* R_f.at<double>(2,1)  + R_f.at<double>(2,2)* R_f.at<double>(2,2)  ) );
 	// cout<<endl;
 
-
-    
-   // lines for printing results
-   // myfile << t_f.at<double>(0) << " " << t_f.at<double>(1) << " " << t_f.at<double>(2) << endl;
-
-  // a redetection is triggered in case the number of feautres being tracked go below a particular threshold
- 	  // if (prevFeatures.size() < MIN_NUM_FEAT){
-    //   //cout << "Number of tracked features reduced to " << prevFeatures.size() << endl;
-    //   //cout << "trigerring redection" << endl;
- 		 //  featureDetection(prevImage, prevFeatures);
-    //   featureTracking(prevImage,currImage,prevFeatures,currFeatures, status);
-
- 	  // }
-
     prevImage = currImage.clone();
     prevFeatures = currFeatures;
 
     // X and Z co-ordinate is printed into the image 
-    int x = int(t_f.at<double>(0)) + 300;   //basic offset
+    int x = int(t_f.at<double>(0)) + 300;   	//basic offset
     int y = 500 - int(t_f.at<double>(2)) ;	//basic offset
 
-    int GT_x = int(real_x) + 300;   //basic offset
+    int GT_x = int(real_x) + 300;   	//basic offset
     int GT_y = 500 - int(real_z) ;	//basic offset
 
     circle(traj, Point(x, y) ,1, CV_RGB(0,255,0), 2);
@@ -328,9 +284,6 @@ int main()	{
   clock_t end = clock();
   double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
   cout << "Total time taken: " << elapsed_secs << "s" << endl;
-
-  //cout << R_f << endl;
-  //cout << t_f << endl;
 
   return 0;
 }
